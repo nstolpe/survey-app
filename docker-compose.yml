@@ -1,0 +1,44 @@
+version: '3'
+services:
+  database:
+    image: 'postgres:latest'
+    ports:
+      - '3080:5432'
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: default_database
+    volumes:
+      - ./database/data/:/var/lib/postgresql/data/
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+  server:
+    image: node:20-alpine
+    volumes:
+      - ./server:/server
+    working_dir: /server
+    ports:
+      - '3000:3000'
+    depends_on:
+      - database
+    command:
+      - /bin/sh
+      - -c
+      - |
+        npm install
+        npm start
+  client:
+    image: node:20-alpine
+    volumes:
+      - ./client:/client
+    working_dir: /client
+    ports:
+      - '3030:3030'
+    depends_on:
+      - database
+      - server
+    command:
+      - /bin/sh
+      - -c
+      - |
+        npm install
+        npm start

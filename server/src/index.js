@@ -37,16 +37,29 @@ app.get('/default-values', (req, res) => {
     return { colors, foods };
   })
     .then((data) => res.send(data))
-    .catch((e) => res.send({ colors: [], foods: [] }));
+    .catch((e) => {
+      console.log(e);
+      res.send({ colors: [], foods: [] });
+    });
 });
 
 app.get('/survey-results', (req, res) => {
-  // @TODO
+  db.task('survey-results-query', async (t) => {
+    const colors = await t.any('SELECT * FROM colors');
+    const foods = await t.any('SELECT * FROM foods');
+
+    return { colors, foods };
+  })
+    .then((data) => res.json(data))
+    .catch((e) => {
+      console.log(e);
+      res.json({ colors: [], foods: [] });
+    });
 });
 
-app.post('/record-vote', async (req, res) => {
+app.post('/record-vote', (req, res) => {
   const { color, food } = req.body;
-  console.log({ color, food });
+
   if (!color || !food) {
     res.status(400).json({ error: 'MISSING_DATA' });
   }

@@ -2,24 +2,42 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import debounce from 'lodash.debounce';
 
+import CustomRadioButton from 'Components/CustomRadioButton';
+
+const OptionsWrapper = styled.div`
+  margin-bottom: 2rem;
+`;
+
 const Label = styled.label`
-  display: block;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
 `;
 
 const OtherInputWrapper = styled.span`
   position: relative;
+  width: 100%;
 `;
 
 const OtherInput = styled.input`
+  font-size: 1.2rem;
   outline: none;
   border-style: solid;
   border-width: 1px;
   border-color: rgb(0, 0, 0);
+  border-radius: 4px;
   padding: 0 0.5em;
+  width: 100%;
   transition: border-color 0.3s ease;
   &:disabled {
     border-color: rgb(180, 180, 180);
   }
+`;
+
+const OptionName = styled.span`
+  font-family: sans-serif;
+  font-size: 1.2rem;
 `;
 
 // overlays the other text input when it's disabled so it
@@ -34,18 +52,21 @@ const DisabledOtherInputClickInterceptor = styled.div`
 
 const Options = ({ defaults, type, setActiveOption }) => {
   const [otherActive, setOtherActive] = useState(false);
+  const [activeRadioId, setActiveRadioId] = useState(null);
   const otherInputRef = useRef();
+  const optionOtherId = `${type}-option-other`;
 
-  const onOptionSelect = (name) => {
+  const onOptionSelect = (e) => {
     setOtherActive(false);
-    setActiveOption(name);
+    setActiveOption(e.target.value);
+    setActiveRadioId(e.target.id);
   };
-  const onOtherOptionSelect = () => {
+  const onOtherOptionSelect = (e) => {
     setOtherActive(true);
     setActiveOption(otherInputRef.current.value || null);
+    setActiveRadioId(e.target.id);
   };
   const onOtherOptionTextChange = (e) => {
-    console.log(e.target.value);
     setActiveOption(e.target.value || null);
   };
 
@@ -57,27 +78,29 @@ const Options = ({ defaults, type, setActiveOption }) => {
   }, [otherActive]);
 
   return (
-    <div>
+    <OptionsWrapper>
       {defaults.map(({ name, id }) => {
         const optionId = `${type}-option-${id}`;
         return (
           <Label htmlFor={optionId} key={id}>
-            <input
+            <CustomRadioButton
               type="radio"
               name={`${type}-option`}
-              value={id}
+              value={name}
               id={optionId}
-              onClick={() => onOptionSelect(name)}
+              isActive={activeRadioId === optionId}
+              onClick={onOptionSelect}
             />
-            <span>{name}</span>
+            <OptionName>{name}</OptionName>
           </Label>
         );
       })}
       <Label htmlFor={`${type}-option-other`} key={`${type}-option-other`}>
-        <input
+        <CustomRadioButton
           type="radio"
           name={`${type}-option`}
-          id={`${type}-option-other`}
+          id={optionOtherId}
+          isActive={activeRadioId === optionOtherId}
           onClick={onOtherOptionSelect}
         />
         <OtherInputWrapper>
@@ -86,12 +109,12 @@ const Options = ({ defaults, type, setActiveOption }) => {
             onChange={debounce(onOtherOptionTextChange, 100)}
             disabled={!otherActive}
             ref={otherInputRef}
-            placeholder={`enter a custom ${type}`}
+            placeholder={`Enter a custom ${type}`}
           />
           {!otherActive && <DisabledOtherInputClickInterceptor />}
         </OtherInputWrapper>
       </Label>
-    </div>
+    </OptionsWrapper>
   );
 };
 

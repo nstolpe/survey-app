@@ -1,8 +1,21 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import App from 'Components/App';
+import Results from 'Components/Results';
+import Survey from 'Components/Survey';
 
 const root = createRoot(document.getElementById('root'));
 
-root.render(<App />);
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Survey />,
+  },
+  {
+    path: 'results',
+    element: <Results />,
+  },
+]);
+
+root.render(<RouterProvider router={router} />);

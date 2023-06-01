@@ -11,6 +11,7 @@ module.exports = async () => ({
     host: '0.0.0.0',
     port: 3030,
     compress: false,
+    historyApiFallback: true,
   },
   devtool: 'source-map',
   module: {
@@ -29,7 +30,6 @@ module.exports = async () => ({
   resolve: {
     alias: {
       Components: path.resolve(__dirname, 'src/components'),
-      Constants: path.resolve(__dirname, 'src/constants'),
       Utility: path.resolve(__dirname, 'src/utility'),
     },
     extensions: ['.js', '.jsx'],

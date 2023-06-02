@@ -4,7 +4,7 @@
   "description": "Poll App client application",
   "scripts": {
     "start": "webpack serve --env API_BASE_URL=$API_BASE_URL --mode development --open --hot",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "nils",
   "license": "ISC",
@@ -14,7 +14,12 @@
     ],
     "presets": [
       "@babel/preset-env",
-      "@babel/preset-react"
+      [
+        "@babel/preset-react",
+        {
+          "runtime": "automatic"
+        }
+      ]
     ]
   },
   "dependencies": {
@@ -33,6 +38,10 @@
     "@babel/preset-env": "^7.22.4",
     "@babel/preset-react": "^7.22.3",
     "@emotion/babel-plugin": "^11.11.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "babel-jest": "^29.5.0",
     "babel-loader": "^9.1.2",
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
@@ -40,6 +49,8 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "html-webpack-plugin": "^5.5.1",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "prettier": "^2.8.8",
     "webpack": "^5.84.1",
     "webpack-cli": "^5.1.1"

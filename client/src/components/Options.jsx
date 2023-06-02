@@ -91,6 +91,7 @@ const Options = ({ defaults, type, setActiveOption }) => {
               id={optionId}
               isActive={activeRadioId === optionId}
               onClick={onOptionSelect}
+              data-testid={name}
             />
             <OptionName>{name}</OptionName>
           </Label>
@@ -103,6 +104,7 @@ const Options = ({ defaults, type, setActiveOption }) => {
           id={optionOtherId}
           isActive={activeRadioId === optionOtherId}
           onClick={onOtherOptionSelect}
+          data-testid={optionOtherId}
         />
         <OtherInputWrapper>
           <OtherInput
@@ -111,8 +113,11 @@ const Options = ({ defaults, type, setActiveOption }) => {
             disabled={!otherActive}
             ref={otherInputRef}
             placeholder={`Enter a custom ${type}`}
+            data-testid="other-input"
           />
-          {!otherActive && <DisabledOtherInputClickInterceptor />}
+          {!otherActive && (
+            <DisabledOtherInputClickInterceptor data-testid="disabled-other-input-click-interceptor" />
+          )}
         </OtherInputWrapper>
       </Label>
     </OptionsWrapper>

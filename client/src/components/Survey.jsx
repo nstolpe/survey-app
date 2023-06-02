@@ -38,7 +38,7 @@ const SubmitButton = styled.button`
   }
 `;
 
-const App = () => {
+const Survey = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [defaultColors, setDefaultColors] = useState([]);
   const [defaultFoods, setDefaultFoods] = useState([]);
@@ -97,4 +97,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Survey;

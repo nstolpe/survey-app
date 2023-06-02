@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import debounce from 'lodash.debounce';
 
@@ -116,6 +117,22 @@ const Options = ({ defaults, type, setActiveOption }) => {
       </Label>
     </OptionsWrapper>
   );
+};
+
+Options.propTypes = {
+  defaults: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    })
+  ),
+  type: PropTypes.string.isRequired,
+  setActiveOption: PropTypes.func,
+};
+
+Options.defaultProps = {
+  defaults: [],
+  setActiveOption: () => {},
 };
 
 export default Options;

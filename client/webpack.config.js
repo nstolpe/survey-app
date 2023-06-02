@@ -1,7 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
-module.exports = async () => ({
+module.exports = (env) => ({
   entry: './src/index.jsx',
   output: {
     path: path.join(__dirname, '/dist'),
@@ -37,6 +38,9 @@ module.exports = async () => ({
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, '/public/index.html'),
+    }),
+    new webpack.DefinePlugin({
+      process: { env: JSON.stringify(env) },
     }),
   ],
 });

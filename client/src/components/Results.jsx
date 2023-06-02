@@ -58,6 +58,7 @@ const Results = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [colors, setColors] = useState([]);
   const [foods, setFoods] = useState([]);
+
   useEffect(() => {
     const getSurveyResults = async () => {
       const results = await fetch(SURVEY_RESULTS_URL);
@@ -69,6 +70,7 @@ const Results = () => {
     };
     getSurveyResults();
   }, []);
+
   return (
     <>
       <GlobalStyles />

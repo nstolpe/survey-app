@@ -3,9 +3,7 @@
   "version": "0.0.1",
   "description": "Poll App client application",
   "scripts": {
-    "start": "webpack serve --mode development --open --hot",
-    "build": "webpack --mode production",
-    "lint": "eslint src/",
+    "start": "webpack serve --env API_BASE_URL=$API_BASE_URL --mode development --open --hot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "nils",

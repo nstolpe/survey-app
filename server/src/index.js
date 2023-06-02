@@ -1,26 +1,30 @@
-const express = require('express');
 const cors = require('cors');
+const express = require('express');
 const pgp = require('pg-promise')();
+
+const {
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DB,
+  POSTGRES_PORT,
+  CLIENT_BASE_URL,
+} = process.env;
 
 const app = express();
 const port = 3000;
-const db = pgp('postgres://username:password@database:5432/default_database');
+const db = pgp(
+  `postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:${POSTGRES_PORT}/${POSTGRES_DB}`
+);
 
 app.use(
   cors({
-    origin: 'http://localhost:3030',
+    origin: CLIENT_BASE_URL,
   })
 );
 
 app.use(express.json());
 
 app.get('/', async (req, res) => {
-  try {
-    const data = await db.any('SELECT * FROM colors');
-    console.log(data);
-  } catch (e) {
-    console.log(e);
-  }
   res.send('Survey App');
 });
 

@@ -4,10 +4,7 @@ services:
     image: 'postgres:latest'
     ports:
       - '3080:5432'
-    environment:
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: default_database
+    env_file: .env
     volumes:
       - ./database/data/:/var/lib/postgresql/data/
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -20,6 +17,7 @@ services:
       - '3000:3000'
     depends_on:
       - database
+    env_file: .env
     command:
       - /bin/sh
       - -c
@@ -36,6 +34,7 @@ services:
     depends_on:
       - database
       - server
+    env_file: .env
     command:
       - /bin/sh
       - -c

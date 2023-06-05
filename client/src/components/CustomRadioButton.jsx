@@ -33,6 +33,8 @@ const RadioButtonWrapper = styled.div`
 
 const RadioButton = styled.input`
   opacity: 0;
+  height: 100%;
+  width: 100%;
 `;
 
 const CustomRadioButton = ({ isActive, innerColor, outerColor, ...props }) => {
@@ -47,7 +49,7 @@ const CustomRadioButton = ({ isActive, innerColor, outerColor, ...props }) => {
       isActive={isActive}
       isFocused={isFocused}
     >
-      <RadioButton {...props} onBlur={onBlur} onFocus={onFocus} />
+      <RadioButton {...props} onBlur={onBlur} onFocus={onFocus} type="radio" />
     </RadioButtonWrapper>
   );
 };

@@ -37,8 +37,10 @@ const RadioButton = styled.input`
   width: 100%;
 `;
 
-const CustomRadioButton = ({ isActive, innerColor, outerColor, ...props }) => {
+const CustomRadioButton = ({ innerColor, outerColor, ...props }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const radioCallbackRef = (node) => setIsActive(node?.checked ?? false);
   const onFocus = () => setIsFocused(true);
   const onBlur = () => setIsFocused(false);
 
@@ -49,7 +51,13 @@ const CustomRadioButton = ({ isActive, innerColor, outerColor, ...props }) => {
       isActive={isActive}
       isFocused={isFocused}
     >
-      <RadioButton {...props} onBlur={onBlur} onFocus={onFocus} type="radio" />
+      <RadioButton
+        {...props}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        ref={radioCallbackRef}
+        type="radio"
+      />
     </RadioButtonWrapper>
   );
 };

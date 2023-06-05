@@ -89,7 +89,6 @@ const Options = ({ defaults, type, setActiveOption }) => {
               name={`${type}-option`}
               value={name}
               id={optionId}
-              isActive={activeRadioId === optionId}
               onClick={onOptionSelect}
               data-testid={name}
             />
@@ -102,7 +101,6 @@ const Options = ({ defaults, type, setActiveOption }) => {
           type="radio"
           name={`${type}-option`}
           id={optionOtherId}
-          isActive={activeRadioId === optionOtherId}
           onClick={onOtherOptionSelect}
           data-testid={optionOtherId}
         />

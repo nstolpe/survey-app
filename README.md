@@ -1,6 +1,6 @@
 ### Survey App
 
-This is a full stack JavaScript application, with a Express server and a React client. It allows a user to take a survey defining their favorite colors and foods. The server and client each run in their own Docker container. There's also a third container running PostgreSQL for data persistence. The app requires Docker Desktop or Docker Engine and can be started by running `docker compose up` from the root directory.
+This is a full stack JavaScript application, with an Express server and a React client. It allows a user to take a survey defining their favorite colors and foods. The server and client each run in their own Docker container. There's also a third container running PostgreSQL for data persistence. The app requires Docker Desktop or Docker Engine and can be started by running `docker compose up` from the root directory.
 
 Environment variables for all three containers are in the root level `.env` file. The server and database both include all environment variables. The client app has access to them all in `client/package.json` but needs to assign them at the beginning of that file's `start` script so they will be available as values on the `env` argument in `client/webpack.config.js`, where the entire `env` object is made available to the React app as `process.env`.
 

@@ -54,10 +54,10 @@ const SurveyLink = styled(Link)`
   }
 `;
 
-const Results = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [colors, setColors] = useState([]);
-  const [foods, setFoods] = useState([]);
+const Results: React.FC = () => {
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [colors, setColors] = useState<SurveyData[]>([]);
+  const [foods, setFoods] = useState<SurveyData[]>([]);
 
   useEffect(() => {
     const getSurveyResults = async () => {

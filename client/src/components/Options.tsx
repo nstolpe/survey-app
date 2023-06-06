@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import debounce from 'lodash.debounce';
 
@@ -51,29 +50,41 @@ const DisabledOtherInputClickInterceptor = styled.div`
   left: 0;
 `;
 
-const Options = ({ defaults, type, setActiveOption }) => {
+export interface OptionsProps {
+  defaults?: {
+    id: string;
+    name: string;
+  }[];
+  type: string;
+  setActiveOption: (option: string | null) => void;
+}
+
+const Options: React.FC<OptionsProps> = ({
+  defaults = [],
+  type,
+  setActiveOption,
+}) => {
   const [otherActive, setOtherActive] = useState(false);
-  const [activeRadioId, setActiveRadioId] = useState(null);
-  const otherInputRef = useRef();
+  const otherInputRef: React.RefObject<HTMLInputElement> = useRef(null);
   const optionOtherId = `${type}-option-other`;
 
-  const onOptionSelect = (e) => {
+  const onOptionSelect = (event: React.PointerEvent<HTMLInputElement>) => {
     setOtherActive(false);
-    setActiveOption(e.target.value);
-    setActiveRadioId(e.target.id);
+    setActiveOption((event.target as HTMLInputElement).value);
   };
-  const onOtherOptionSelect = (e) => {
+  const onOtherOptionSelect = () => {
     setOtherActive(true);
-    setActiveOption(otherInputRef.current.value || null);
-    setActiveRadioId(e.target.id);
+    setActiveOption(otherInputRef?.current?.value || null);
   };
-  const onOtherOptionTextChange = (e) => {
-    setActiveOption(e.target.value || null);
+  const onOtherOptionTextChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setActiveOption(event.target.value || null);
   };
 
   // shift focus to the other text input when it's activated.
   useEffect(() => {
-    if (otherActive == true) {
+    if (otherActive == true && otherInputRef.current !== null) {
       otherInputRef.current.focus();
     }
   }, [otherActive]);
@@ -85,7 +96,6 @@ const Options = ({ defaults, type, setActiveOption }) => {
         return (
           <Label htmlFor={optionId} key={id}>
             <CustomRadioButton
-              type="radio"
               name={`${type}-option`}
               value={name}
               id={optionId}
@@ -98,7 +108,6 @@ const Options = ({ defaults, type, setActiveOption }) => {
       })}
       <Label htmlFor={`${type}-option-other`} key={`${type}-option-other`}>
         <CustomRadioButton
-          type="radio"
           name={`${type}-option`}
           id={optionOtherId}
           onClick={onOtherOptionSelect}
@@ -120,22 +129,6 @@ const Options = ({ defaults, type, setActiveOption }) => {
       </Label>
     </OptionsWrapper>
   );
-};
-
-Options.propTypes = {
-  defaults: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-    })
-  ),
-  type: PropTypes.string.isRequired,
-  setActiveOption: PropTypes.func,
-};
-
-Options.defaultProps = {
-  defaults: [],
-  setActiveOption: () => {},
 };
 
 export default Options;

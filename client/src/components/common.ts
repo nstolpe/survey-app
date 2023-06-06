@@ -14,7 +14,7 @@ export const Title = styled.h1`
   margin: 2rem 0;
 `;
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{ isVisible: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;

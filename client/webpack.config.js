@@ -18,7 +18,7 @@ module.exports = (env) => ({
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(j|t)sx?$/,
         exclude: '/node_modules/',
         loader: 'babel-loader',
       },
@@ -33,7 +33,7 @@ module.exports = (env) => ({
       Components: path.resolve(__dirname, 'src/components'),
       Utility: path.resolve(__dirname, 'src/utility'),
     },
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   plugins: [
     new HtmlWebpackPlugin({

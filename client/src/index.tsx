@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Results from 'Components/pages/Results';
 import Survey from 'Components/pages/Survey';
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById('root') as HTMLElement);
 
 const router = createBrowserRouter([
   {

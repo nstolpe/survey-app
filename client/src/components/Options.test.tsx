@@ -1,4 +1,5 @@
-import { fireEvent, render } from '@testing-library/react';
+import React from 'react';
+import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Options from 'Components/Options';
@@ -25,7 +26,7 @@ describe('Components/Options', () => {
         type={type}
       />
     );
-    const optionOne = component.queryByTestId('pizza');
+    const optionOne = component.queryByTestId('pizza') as HTMLElement;
     await user.click(optionOne);
     expect(setActiveOption).toHaveBeenCalledWith('pizza');
   });
@@ -37,7 +38,9 @@ describe('Components/Options', () => {
     const component = render(
       <Options setActiveOption={setActiveOption} type={type} />
     );
-    const otherOption = component.queryByTestId(`${type}-option-other`);
+    const otherOption = component.queryByTestId(
+      `${type}-option-other`
+    ) as HTMLElement;
     await user.click(otherOption);
     expect(setActiveOption).toHaveBeenCalledWith(null);
   });
@@ -52,7 +55,7 @@ describe('Components/Options', () => {
     const otherOption = component.queryByTestId(`${type}-option-other`);
     const otherInput = component.queryByTestId('other-input');
     expect(otherInput).toBeDisabled();
-    await user.click(otherOption);
+    await user.click(otherOption as HTMLElement);
     expect(otherInput).not.toBeDisabled();
   });
 
@@ -66,7 +69,7 @@ describe('Components/Options', () => {
     const otherInput = component.queryByTestId('other-input');
     const disabledOtherInputClickInterceptor = component.queryByTestId(
       'disabled-other-input-click-interceptor'
-    );
+    ) as HTMLElement;
     expect(otherInput).toBeDisabled();
     await user.click(disabledOtherInputClickInterceptor);
     expect(otherInput).not.toBeDisabled();

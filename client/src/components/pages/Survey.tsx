@@ -38,12 +38,12 @@ const SubmitButton = styled.button`
   }
 `;
 
-const Survey = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [defaultColors, setDefaultColors] = useState([]);
-  const [defaultFoods, setDefaultFoods] = useState([]);
-  const [colorOption, setColorOption] = useState(null);
-  const [foodOption, setFoodOption] = useState(null);
+const Survey: React.FC = () => {
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [defaultColors, setDefaultColors] = useState<SurveyData[]>([]);
+  const [defaultFoods, setDefaultFoods] = useState<SurveyData[]>([]);
+  const [colorOption, setColorOption] = useState<string | null>(null);
+  const [foodOption, setFoodOption] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const recordVote = () => {
@@ -53,7 +53,7 @@ const Survey = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ color: colorOption, food: foodOption }),
-    }).then((data) => navigate('/results'));
+    }).then(() => navigate('/results'));
   };
 
   useEffect(() => {

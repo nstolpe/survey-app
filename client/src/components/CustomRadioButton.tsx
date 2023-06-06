@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
-const RadioButtonWrapper = styled.div`
+interface RadioButtonWrapperProps {
+  isActive: boolean;
+  isFocused: boolean;
+  innerColor: string;
+  outerColor: string;
+}
+
+const RadioButtonWrapper = styled.div<RadioButtonWrapperProps>`
   position: relative;
   height: 1.2rem;
   width: 1.2rem;
@@ -37,10 +43,21 @@ const RadioButton = styled.input`
   width: 100%;
 `;
 
-const CustomRadioButton = ({ innerColor, outerColor, ...props }) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [isActive, setIsActive] = useState(false);
-  const radioCallbackRef = (node) => setIsActive(node?.checked ?? false);
+interface CustomRadioButtonProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  innerColor?: string;
+  outerColor?: string;
+}
+
+const CustomRadioButton: React.FC<CustomRadioButtonProps> = ({
+  innerColor = '#000000',
+  outerColor = '#000000',
+  ...props
+}) => {
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const radioCallbackRef = (node: HTMLInputElement) =>
+    setIsActive(node?.checked ?? false);
   const onFocus = () => setIsFocused(true);
   const onBlur = () => setIsFocused(false);
 
@@ -60,18 +77,6 @@ const CustomRadioButton = ({ innerColor, outerColor, ...props }) => {
       />
     </RadioButtonWrapper>
   );
-};
-
-CustomRadioButton.propTypes = {
-  isActive: PropTypes.bool,
-  innerColor: PropTypes.string,
-  outerColor: PropTypes.string,
-};
-
-CustomRadioButton.defaultProps = {
-  isActive: false,
-  innerColor: '#000000',
-  outerColor: '#000000',
 };
 
 export default CustomRadioButton;

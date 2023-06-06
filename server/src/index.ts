@@ -1,6 +1,35 @@
-const cors = require('cors');
-const express = require('express');
-const pgp = require('pg-promise')();
+import cors, { CorsOptions } from 'cors';
+import express, { Request, Response } from 'express';
+import pgPromise, { IDatabase } from 'pg-promise';
+
+interface Color {
+  id: number;
+  name: string;
+  is_default: boolean;
+  votes: number;
+}
+
+interface Food {
+  id: number;
+  name: string;
+  is_default: boolean;
+  votes: number;
+}
+
+interface DefaultValues {
+  colors: Color[];
+  foods: Food[];
+}
+
+interface SurveyResults {
+  colors: Color[];
+  foods: Food[];
+}
+
+interface Vote {
+  color: string;
+  food: string;
+}
 
 const {
   POSTGRES_USER,
@@ -12,77 +41,79 @@ const {
 
 const app = express();
 const port = 3000;
-const db = pgp(
+
+const db: IDatabase<unknown> = pgPromise()(
   `postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:${POSTGRES_PORT}/${POSTGRES_DB}`
 );
 
-app.use(
-  cors({
-    origin: CLIENT_BASE_URL,
-  })
-);
+const corsOptions: CorsOptions = {
+  origin: CLIENT_BASE_URL,
+};
 
+app.use(cors(corsOptions));
 app.use(express.json());
 
-app.get('/', async (req, res) => {
+app.get('/', async (req: Request, res: Response) => {
   res.send('Survey App');
 });
 
-app.get('/default-values', (req, res) => {
+app.get('/default-values', (req: Request, res: Response) => {
   db.task('default-values-query', async (t) => {
-    const colors = await t.any(
+    const colors: Color[] = await t.any(
       'SELECT * FROM colors WHERE is_default = $1',
       true
     );
-    const foods = await t.any(
+    const foods: Food[] = await t.any(
       'SELECT * FROM foods WHERE is_default = $1',
       true
     );
     return { colors, foods };
   })
-    .then((data) => res.send(data))
+    .then((data: DefaultValues) => res.send(data))
     .catch((e) => {
       console.log(e);
       res.send({ colors: [], foods: [] });
     });
 });
 
-app.get('/survey-results', (req, res) => {
+app.get('/survey-results', (req: Request, res: Response) => {
   db.task('survey-results-query', async (t) => {
-    const colors = await t.any('SELECT * FROM colors');
-    const foods = await t.any('SELECT * FROM foods');
-
+    const colors: Color[] = await t.any('SELECT * FROM colors');
+    const foods: Food[] = await t.any('SELECT * FROM foods');
     return { colors, foods };
   })
-    .then((data) => res.json(data))
+    .then((data: SurveyResults) => res.json(data))
     .catch((e) => {
       console.log(e);
       res.json({ colors: [], foods: [] });
     });
 });
 
-app.post('/record-vote', (req, res) => {
-  const { color, food } = req.body;
+app.post('/record-vote', (req: Request, res: Response) => {
+  const { color, food }: Vote = req.body;
 
   if (!color || !food) {
     res.status(400).json({ error: 'MISSING_DATA' });
   }
 
+  const sanitizedColor = color.toLowerCase();
+  const sanitizedFood = food.toLowerCase();
+
   // wrap all these queries in a task so they use the same connection
   db.task('record-vote-query', async (t) => {
-    const existingColor = await t.oneOrNone(
+    const existingColor: Color | null = await t.oneOrNone(
       'SELECT * FROM colors WHERE name = $1',
-      color
+      sanitizedColor
     );
-    const existingFood = await t.oneOrNone(
+    const existingFood: Food | null = await t.oneOrNone(
       'SELECT * FROM foods WHERE name = $1',
-      food
+      sanitizedFood
     );
 
     if (existingColor === null) {
       await t.none(
         'INSERT INTO colors (name, is_default, votes) VALUES ($1, $2, $3)',
-        [color, false, 1]
+        [sanitizedColor, false, 1]
       );
     } else {
       const { id, votes } = existingColor;
@@ -95,7 +126,7 @@ app.post('/record-vote', (req, res) => {
     if (existingFood === null) {
       await t.none(
         'INSERT INTO foods (name, is_default, votes) VALUES ($1, $2, $3)',
-        [food, false, 1]
+        [sanitizedFood, false, 1]
       );
     } else {
       const { id, votes } = existingFood;
@@ -105,7 +136,7 @@ app.post('/record-vote', (req, res) => {
       ]);
     }
   })
-    .then(res.json({ success: 'VOTE_RECORDED' }))
+    .then(() => res.json({ success: 'VOTE_RECORDED' }))
     .catch((e) => {
       console.log(e);
       res.status(500).json({ error: 'DATABASE_ERROR' });

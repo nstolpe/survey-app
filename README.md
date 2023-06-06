@@ -16,7 +16,7 @@ Further development possibilities:
 * associating users to favorites in the database
 * updates to user favorites if a user selects a different favorite of type from what has already been persisted
 * the addition of more favorites
-* conversion to TypeScript
+* ~~conversion to TypeScript~~
 * CSRF protection
 * for colors, display a swatch of each potential color next to it on survey and results pages
 * similarly for foods, map a food to an emoji, if possible. fall back to something generic if an exact match can't be made
